@@ -1,6 +1,5 @@
 import json
 
-
 class KeyValueModel:
     key: str = None
     description: str = None
@@ -62,6 +61,7 @@ class APICollectionModel:
     schema: str = None
     file_name: str = None
     env_file_name: str = None
+    auth: KeyValueModel = None
 
     def __init__(self):
         super().__init__()

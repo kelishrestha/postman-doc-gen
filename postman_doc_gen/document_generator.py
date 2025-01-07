@@ -56,7 +56,7 @@ class DocumentGenerator:
         self.api_collection.description = json_collection[INFO].get(DESCRIPTION, '')
         self.api_collection.schema = json_collection[INFO][SCHEMA]
         self.api_collection.file_name = os.path.basename(collection_file_name)
-
+        self.api_collection.auth = json_collection[AUTH]
         self.side_tree = []
         self.api_id_counter = 0
         self.response_id = 0
@@ -225,9 +225,16 @@ class DocumentGenerator:
 
         api.method = item.get(REQUEST, {}).get(METHOD, None)
 
+        if self.api_collection.auth is not None:
+            auth_headers = DocumentGenerator.get_auth_headers(self.api_collection.auth)
+            if type(auth_headers) is not type(None):
+                api.headers = auth_headers
+
         headers = item.get(REQUEST, {}).get(HEADER, None)
         if headers is not None:
-            api.headers = DocumentGenerator.get_key_values(headers)
+            api_headers = DocumentGenerator.get_key_values(headers)
+            if type(api_headers) is not type(None):
+                api.headers += api_headers
 
         if item.get(REQUEST, {}).get(URL, None) is not None:
             api.url = item.get(REQUEST, {}).get(URL, {}).get(RAW, None)
@@ -367,3 +374,26 @@ class DocumentGenerator:
                 KeyValueModel(item.get(KEY), value_string, desc_string)
             )
         return key_value_list
+
+    @staticmethod
+    def get_auth_headers(auth_headers: json) -> list:
+        if auth_headers is None or len(auth_headers) == 0:
+            return None
+
+        headers = []
+        auth_type = auth_headers.get('type')
+        auth_values = auth_headers.get(auth_type)
+
+        for item in auth_values:
+            value_string = DocumentGenerator.escape_string(item.get(VALUE));
+            if item.get(KEY) == KEY:
+                header_key = value_string
+            else:
+                header_value = value_string
+        headers.append(KeyValueModel(header_key, header_value, auth_type))
+
+        return headers
+
+
+
+
