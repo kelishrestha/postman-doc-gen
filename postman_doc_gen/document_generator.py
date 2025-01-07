@@ -13,6 +13,7 @@ from jinja2 import Environment, FileSystemLoader
 from constants import *
 from models import APIExampleModel, APIModel, APICollectionModel, APIBodyModel, KeyValueModel
 
+import pdb
 
 class DocumentGenerator:
     side_tree = OrderedDict()
@@ -57,6 +58,7 @@ class DocumentGenerator:
         self.api_collection.schema = json_collection[INFO][SCHEMA]
         self.api_collection.file_name = os.path.basename(collection_file_name)
         self.api_collection.auth = json_collection[AUTH]
+        self.api_collection.default_env = json_collection[COLLECTION_VARIABLE]
         self.side_tree = []
         self.api_id_counter = 0
         self.response_id = 0
@@ -266,6 +268,9 @@ class DocumentGenerator:
         if self.env_file is not None:
             json_responses = self.apply_env_values(json_responses, self.env_file)
 
+        if self.api_collection.default_env is not None:
+            json_responses = self.apply_env_values(json_responses, { 'values': self.api_collection.default_env })
+
         for res in json_responses:
             self.response_id = self.response_id + 1
             api_example = APIExampleModel()
@@ -308,15 +313,23 @@ class DocumentGenerator:
             api_example.url = None
             api_example.request_body = None
 
+            if self.env_file is None:
+                if self.api_collection.default_env is not None:
+                    env_variables = { 'values': self.api_collection.default_env }
+                else:
+                    env_variables = self.env_file
+            else:
+                env_variables = self.env_file
+
             if api.url is not None:
-                api_example.url = self.apply_env_values_string(api.url, self.env_file)
+                api_example.url = self.apply_env_values_string(api.url, env_variables)
 
             if api_example.url is not None and api_example.method is not None:
                 api_example.request_body = '\n' + api_example.method + ' ' + api_example.url
 
             if api.body is not None and api.body.raw is not None:
                 api_example.request_body = (api_example.request_body if api_example.request_body is not None else '') \
-                                           + '\n' + self.apply_env_values(api.body.raw, self.env_file)
+                                           + '\n' + self.apply_env_values(api.body.raw, env_variables)
 
             examples.append(api_example)
 

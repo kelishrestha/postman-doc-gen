@@ -63,6 +63,7 @@ class APICollectionModel:
     file_name: str = None
     env_file_name: str = None
     auth: KeyValueModel = None
+    default_env: KeyValueModel = None
 
     def __init__(self):
         super().__init__()
