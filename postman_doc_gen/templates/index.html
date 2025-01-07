@@ -97,8 +97,8 @@
                                             {{api.name}} <span class="lock-icon"></span>
                                         </div>
                                      </div>
-                                    {%- if api.url is defined and api.url is not none%}
-                                    <div class="url">{{api.url}}</div>
+                                    {%- if api.route is defined and api.route is not none%}
+                                    <div class="url">{{api.route}}</div>
                                     {% endif %}
                                     {%- if api.description is defined and api.description is not none%}
                                     <div class="description request-description">

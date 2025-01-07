@@ -239,6 +239,10 @@ class DocumentGenerator:
         if item.get(REQUEST, {}).get(URL, None) is not None:
             api.url = item.get(REQUEST, {}).get(URL, {}).get(RAW, None)
 
+            host = item.get(REQUEST, {}).get(URL, {}).get(HOST, None)
+            route_url = api.url.replace(host[0], '')
+            api.route = route_url
+
             query_params = item.get(REQUEST, {}).get(URL, {}).get(QUERY, None)
             if query_params is not None:
                 api.params = DocumentGenerator.get_key_values(query_params)

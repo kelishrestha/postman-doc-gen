@@ -46,6 +46,7 @@ class APIModel:
     path_variables: list = None
 
     url: str = None
+    route: str = None
     examples: list = []
 
     def __init__(self):
