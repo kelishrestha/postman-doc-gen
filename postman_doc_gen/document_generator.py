@@ -401,6 +401,9 @@ class DocumentGenerator:
                 desc_string = DocumentGenerator.escape_string(
                     item.get(DESCRIPTION, {}).get(CONTENT, None))
 
+            if desc_string is None:
+                desc_string = 'string'
+
             key_value_list.append(
                 KeyValueModel(item.get(KEY), value_string, desc_string)
             )
