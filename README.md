@@ -17,6 +17,11 @@ Generate HTML API documentation from a postman collection. You can use this tool
   ./postman_doc_gen [path_to_collection] -o [path_to_output_folder] -e [path_to_environment_json_file]
   ```
 
+  To enable download links to collection, use the following command
+
+  ```
+  ./postman_doc_gen [path_to_collection] -o [path_to_output_folder] -e [path_to_environment_json_file] -d true
+  ```
 
 The output folder should now show the following:
 
