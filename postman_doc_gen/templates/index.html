@@ -141,7 +141,7 @@
                                         <div class="body-heading">PATH VARIABLES</div>
                                         <hr>
                                         {%- for item in api.path_variables %}
-                                          <div class="param row">
+                                        <div class="param row">
                                             <div class="name col-md-3 col-xs-12">{{ item.key }}</div>
                                             <div class="value col-md-9 col-xs-12">{{ item.value | safe}}</div>
                                             <div class="description col-md-9 col-xs-12"><p>{{ item.description | safe}}</p>
@@ -151,7 +151,7 @@
                                     </div>
                                     {% endif %}
 
-                                    {%- if api.body is defined and api.body is not none %}
+                                    {%- if api.body_exist %}
                                     <div class="request-body">
                                         <div class="body-heading">BODY <span class="body-type">{{ api.body.mode }}</span></div>
                                         <hr>

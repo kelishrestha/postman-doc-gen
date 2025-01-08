@@ -5,7 +5,7 @@ import argparse
 def init_arg_parse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         usage="%(prog)s [COLLECTION FILE PATH]",
-        description='''Generates an HTML document from a Postman collection. Copies the resulting html file along with 
+        description='''Generates an HTML document from a Postman collection. Copies the resulting html file along with
         css and js to an output directory in the same path, unless an output directory is specified.
         If an environment file is provided, applies the env values to the API examples. '''
     )

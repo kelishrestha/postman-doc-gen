@@ -48,6 +48,7 @@ class APIModel:
     url: str = None
     route: str = None
     examples: list = []
+    body_exist: bool = False
 
     def __init__(self):
         super().__init__()
