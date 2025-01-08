@@ -112,9 +112,9 @@
                                         <hr>
                                         {%- for item in api.headers %}
                                           <div class="param row">
-                                            <div class="name col-md-3 col-xs-12">{{ item.key }}</div>
-                                            <div class="value col-md-9 col-xs-12">{{ item.description | safe}}</div>
-                                            <div class="description col-md-9 col-xs-12 font-italic"><p>{{ item.value | safe}}</p>
+                                            <div class="name col-md-4 col-xs-12">{{ item.key }}</div>
+                                            <div class="value col-md-8 col-xs-12">{{ item.description | safe}}</div>
+                                            <div class="description col-md-8 col-xs-12 font-italic hide"><p>{{ item.value | safe}}</p>
                                             </div>
                                           </div>
                                         {%- endfor %}
@@ -127,9 +127,9 @@
                                         <hr>
                                         {%- for item in api.params %}
                                           <div class="param row">
-                                            <div class="name col-md-3 col-xs-12">{{ item.key }}</div>
-                                            <div class="value col-md-9 col-xs-12">{{ item.description | safe}}</div>
-                                            <div class="description col-md-9 col-xs-12 font-italic"><p>{{ item.value | safe}}</p>
+                                            <div class="name col-md-4 col-xs-12">{{ item.key }}</div>
+                                            <div class="value col-md-8 col-xs-12">{{ item.description | safe}}</div>
+                                            <div class="description col-md-8 col-xs-12 font-italic hide"><p>{{ item.value | safe}}</p>
                                             </div>
                                           </div>
                                         {%- endfor %}
@@ -142,9 +142,9 @@
                                         <hr>
                                         {%- for item in api.path_variables %}
                                         <div class="param row">
-                                            <div class="name col-md-3 col-xs-12">{{ item.key }}</div>
-                                            <div class="value col-md-9 col-xs-12">{{ item.description | safe}}</div>
-                                            <div class="description col-md-9 col-xs-12 font-italic"><p>{{ item.value | safe}}</p>
+                                            <div class="name col-md-4 col-xs-12">{{ item.key }}</div>
+                                            <div class="value col-md-8 col-xs-12">{{ item.description | safe}}</div>
+                                            <div class="description col-md-8 col-xs-12 font-italic hide"><p>{{ item.value | safe}}</p>
                                             </div>
                                           </div>
                                         {%- endfor %}
@@ -168,9 +168,9 @@
                                         {%- if api.body.key_values is not none %}
                                             {%- for item in api.body.key_values %}
                                               <div class="param row">
-                                                <div class="name col-md-3 col-xs-12">{{ item.key }}</div>
-                                                <div class="value col-md-9 col-xs-12">{{ item.description }}</div>
-                                                <div class="description col-md-9 col-xs-12 font-italic"><p>{{ item.value }}</p>
+                                                <div class="name col-md-4 col-xs-12">{{ item.key }}</div>
+                                                <div class="value col-md-8 col-xs-12">{{ item.description }}</div>
+                                                <div class="description col-md-8 col-xs-12 font-italic hide"><p>{{ item.value }}</p>
                                                 </div>
                                               </div>
                                             {%- endfor %}
