@@ -56,7 +56,7 @@
         <main class="page-content">
             <div id="overlay" class="overlay"></div>
             <div class="container-fluid">
-                <div class="row d-flex align-items-center p-3 border-bottom">
+                <div class="row d-flex align-items-center p-0 border-bottom">
                     <div class="col-md-1">
                         <a id="toggle-sidebar" class="btn rounded-0 p-3" href="#"> <i class="fas fa-bars"></i> </a>
                     </div>
@@ -72,7 +72,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="row p-lg-4">
+                <div class="row p-0">
                     <article class="main-content col-md-12 pr-lg-9" id="doc-body">
                         <div class="row row-no-padding row-eq-height">
                             <div class="col-md-6 col-xs-12">
@@ -88,7 +88,7 @@
                         </div>
 
                         {%- for api in api_info %}
-                        <div class="row row-no-padding row-eq-height">
+                        <div class="row row-no-padding row-eq-height pb-5">
                             <div class="col-md-6 col-xs-12 section">
                                 <div class="api-information" id="{{api.id}}">
                                      <div class="heading">
@@ -97,8 +97,8 @@
                                             {{api.name}} <span class="lock-icon"></span>
                                         </div>
                                      </div>
-                                    {%- if api.url is defined and api.url is not none%}
-                                    <div class="url">{{api.url}}</div>
+                                    {%- if api.route is defined and api.route is not none%}
+                                    <div class="url font-weight-bold">{{api.route}}</div>
                                     {% endif %}
                                     {%- if api.description is defined and api.description is not none%}
                                     <div class="description request-description">
@@ -112,9 +112,9 @@
                                         <hr>
                                         {%- for item in api.headers %}
                                           <div class="param row">
-                                            <div class="name col-md-3 col-xs-12">{{ item.key }}</div>
-                                            <div class="value col-md-9 col-xs-12">{{ item.value | safe}}</div>
-                                            <div class="description col-md-9 col-xs-12"><p>{{ item.description | safe}}</p>
+                                            <div class="name col-md-4 col-xs-12">{{ item.key }}</div>
+                                            <div class="value col-md-8 col-xs-12">{{ item.description | safe}}</div>
+                                            <div class="description col-md-8 col-xs-12 font-italic hide"><p>{{ item.value | safe}}</p>
                                             </div>
                                           </div>
                                         {%- endfor %}
@@ -127,9 +127,9 @@
                                         <hr>
                                         {%- for item in api.params %}
                                           <div class="param row">
-                                            <div class="name col-md-3 col-xs-12">{{ item.key }}</div>
-                                            <div class="value col-md-9 col-xs-12">{{ item.value | safe}}</div>
-                                            <div class="description col-md-9 col-xs-12"><p>{{ item.description | safe}}</p>
+                                            <div class="name col-md-4 col-xs-12">{{ item.key }}</div>
+                                            <div class="value col-md-8 col-xs-12">{{ item.description | safe}}</div>
+                                            <div class="description col-md-8 col-xs-12 font-italic hide"><p>{{ item.value | safe}}</p>
                                             </div>
                                           </div>
                                         {%- endfor %}
@@ -141,17 +141,17 @@
                                         <div class="body-heading">PATH VARIABLES</div>
                                         <hr>
                                         {%- for item in api.path_variables %}
-                                          <div class="param row">
-                                            <div class="name col-md-3 col-xs-12">{{ item.key }}</div>
-                                            <div class="value col-md-9 col-xs-12">{{ item.value | safe}}</div>
-                                            <div class="description col-md-9 col-xs-12"><p>{{ item.description | safe}}</p>
+                                        <div class="param row">
+                                            <div class="name col-md-4 col-xs-12">{{ item.key }}</div>
+                                            <div class="value col-md-8 col-xs-12">{{ item.description | safe}}</div>
+                                            <div class="description col-md-8 col-xs-12 font-italic hide"><p>{{ item.value | safe}}</p>
                                             </div>
                                           </div>
                                         {%- endfor %}
                                     </div>
                                     {% endif %}
 
-                                    {%- if api.body is defined and api.body is not none %}
+                                    {%- if api.body_exist %}
                                     <div class="request-body">
                                         <div class="body-heading">BODY <span class="body-type">{{ api.body.mode }}</span></div>
                                         <hr>
@@ -168,9 +168,9 @@
                                         {%- if api.body.key_values is not none %}
                                             {%- for item in api.body.key_values %}
                                               <div class="param row">
-                                                <div class="name col-md-3 col-xs-12">{{ item.key }}</div>
-                                                <div class="value col-md-9 col-xs-12">{{ item.value }}</div>
-                                                <div class="description col-md-9 col-xs-12"><p>{{ item.description }}</p>
+                                                <div class="name col-md-4 col-xs-12">{{ item.key }}</div>
+                                                <div class="value col-md-8 col-xs-12">{{ item.description }}</div>
+                                                <div class="description col-md-8 col-xs-12 font-italic hide"><p>{{ item.value }}</p>
                                                 </div>
                                               </div>
                                             {%- endfor %}
@@ -180,9 +180,9 @@
                                 </div>
                             </div>
                             {%- if api.examples|length > 0 %}
-                            <div class="col-md-6 col-xs-12 examples">
-                                <div class="sample-request">
-                                    <div class="heading">
+                            <div class="col-md-6 col-xs-12 examples pt-4">
+                                <div class="sample-request pt-3">
+                                    <div class="heading h6">
                                         <span>Example Request</span>
                                     </div>
                                     <div class="responses-index">
@@ -212,7 +212,7 @@
                                     </div>
                                     {%- if example.response_body is defined and example.response_body is not none%}
                                     <div class="sample-response">
-                                        <div class="heading">
+                                        <div class="heading h6">
                                             <span>Example Response</span>
                                         </div>
                                         <div class="responses-index">

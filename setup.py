@@ -2,15 +2,15 @@ from setuptools import setup, find_packages
 
 setup(name='postman_doc_gen',
 
-      version='1.1.2',
+      version='1.1.3',
 
-      url='https://github.com/karthiks3000/postman-doc-gen.git',
+      url='https://github.com/kelishrestha/postman-doc-gen.git',
 
       license='MIT',
 
-      author='Karthik Subramanian',
+      author='Kelina Shrestha',
 
-      author_email='karthiks3000@yahoo.com',
+      author_email='kylesth@gmail.com',
 
       description='Converts a postman collection into an HTML documentation',
 

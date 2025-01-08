@@ -33,5 +33,6 @@ QUERY = 'query'
 PATH_VARIABLE = 'variable'
 CONTENT = 'content'
 NOT_FOUND ='[NOT FOUND]'
-
-
+AUTH = 'auth'
+HOST = 'host'
+COLLECTION_VARIABLE = 'variable'

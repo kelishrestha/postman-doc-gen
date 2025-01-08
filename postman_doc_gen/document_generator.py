@@ -13,6 +13,7 @@ from jinja2 import Environment, FileSystemLoader
 from constants import *
 from models import APIExampleModel, APIModel, APICollectionModel, APIBodyModel, KeyValueModel
 
+import pdb
 
 class DocumentGenerator:
     side_tree = OrderedDict()
@@ -56,7 +57,8 @@ class DocumentGenerator:
         self.api_collection.description = json_collection[INFO].get(DESCRIPTION, '')
         self.api_collection.schema = json_collection[INFO][SCHEMA]
         self.api_collection.file_name = os.path.basename(collection_file_name)
-
+        self.api_collection.auth = json_collection[AUTH]
+        self.api_collection.default_env = json_collection[COLLECTION_VARIABLE]
         self.side_tree = []
         self.api_id_counter = 0
         self.response_id = 0
@@ -212,29 +214,59 @@ class DocumentGenerator:
         api.id = self.api_id_counter
         api.name = item.get(NAME, NOT_FOUND)
         api.body = None
+        env_variables = self.get_env_variables(self)
+
         if item.get(REQUEST, {}).get(DESCRIPTION, None) is not None:
             api.description = item.get(REQUEST, {}).get(DESCRIPTION, None)
             api.description = self.markdown_to_html(api.description)
 
         if item.get(REQUEST, {}).get(BODY, None) is not None:
-            api.body = self.get_body(item.get(REQUEST).get(BODY))
+            api.body = self.get_body(self, item.get(REQUEST).get(BODY), env_variables)
 
         if api.body is not None and api.body.raw is not None:
             api.body.raw = '\n' + api.body.raw.strip()  # append a line break for better formatting of jsons
             api.body.raw = bleach.clean(api.body.raw)
+            api.body.raw = self.apply_env_values_string(api.body.raw, env_variables)
+            api.body_exist = (len(api.body.raw.strip()) > 0)
+
+        if api.body is not None and api.body.key_values is not None:
+            api.body_exist = (len(api.body.key_values) > 0)
 
         api.method = item.get(REQUEST, {}).get(METHOD, None)
 
+        if self.api_collection.auth is not None:
+            auth_headers = DocumentGenerator.get_auth_headers(self, self.api_collection.auth, env_variables)
+            if type(auth_headers) is not type(None):
+                api_collection_headers = auth_headers
+
+        auth = item.get(REQUEST, {}).get(AUTH, None)
+        if auth is not None:
+            api_collection_headers += DocumentGenerator.get_auth_headers(self, auth, env_variables)
+
         headers = item.get(REQUEST, {}).get(HEADER, None)
         if headers is not None:
-            api.headers = DocumentGenerator.get_key_values(headers)
+            api_attached_headers = []
+            for header in headers:
+                api_attached_headers.append(self.apply_env_values(header, env_variables))
+            api_headers = DocumentGenerator.get_key_values(api_attached_headers)
+
+            if type(api_headers) is not type(None):
+                api_collection_headers += api_headers
+            api.headers = api_collection_headers
 
         if item.get(REQUEST, {}).get(URL, None) is not None:
             api.url = item.get(REQUEST, {}).get(URL, {}).get(RAW, None)
 
+            host = item.get(REQUEST, {}).get(URL, {}).get(HOST, None)
+            route_url = api.url.replace(host[0], '').replace("{{", "").replace("}}", "")
+            api.route = route_url
+
             query_params = item.get(REQUEST, {}).get(URL, {}).get(QUERY, None)
             if query_params is not None:
-                api.params = DocumentGenerator.get_key_values(query_params)
+                static_query_params = []
+                for query_param in query_params:
+                    static_query_params.append(self.apply_env_values(query_param, env_variables))
+                api.params = DocumentGenerator.get_key_values(static_query_params)
 
             path_variables = item.get(REQUEST, {}).get(URL, {}).get(PATH_VARIABLE, None)
             if path_variables is not None:
@@ -254,6 +286,9 @@ class DocumentGenerator:
 
         if self.env_file is not None:
             json_responses = self.apply_env_values(json_responses, self.env_file)
+
+        if self.api_collection.default_env is not None:
+            json_responses = self.apply_env_values(json_responses, { 'values': self.api_collection.default_env })
 
         for res in json_responses:
             self.response_id = self.response_id + 1
@@ -297,15 +332,17 @@ class DocumentGenerator:
             api_example.url = None
             api_example.request_body = None
 
+            env_variables = self.get_env_variables(self)
+
             if api.url is not None:
-                api_example.url = self.apply_env_values_string(api.url, self.env_file)
+                api_example.url = self.apply_env_values_string(api.url, env_variables)
 
             if api_example.url is not None and api_example.method is not None:
                 api_example.request_body = '\n' + api_example.method + ' ' + api_example.url
 
             if api.body is not None and api.body.raw is not None:
                 api_example.request_body = (api_example.request_body if api_example.request_body is not None else '') \
-                                           + '\n' + self.apply_env_values(api.body.raw, self.env_file)
+                                           + '\n' + self.apply_env_values(api.body.raw, env_variables)
 
             examples.append(api_example)
 
@@ -333,7 +370,7 @@ class DocumentGenerator:
                                  output_format='html5')
 
     @staticmethod
-    def get_body(body: json) -> APIBodyModel:
+    def get_body(self, body: json, env_variables) -> APIBodyModel:
         """
         Extracts the contents from the body json. Either raw or urlencoded
         :param body: the current APIModel object being explored
@@ -344,7 +381,8 @@ class DocumentGenerator:
         if body.get(RAW, None) is not None:
             api_body.raw = body.get(RAW)
         elif body.get(api_body.mode, None) is not None:
-            api_body.key_values = DocumentGenerator.get_key_values(body.get(api_body.mode))
+            static_body = self.apply_env_values(body.get(api_body.mode), env_variables)
+            api_body.key_values = DocumentGenerator.get_key_values(static_body)
 
         return api_body
 
@@ -363,7 +401,47 @@ class DocumentGenerator:
                 desc_string = DocumentGenerator.escape_string(
                     item.get(DESCRIPTION, {}).get(CONTENT, None))
 
+            if desc_string is None:
+                desc_string = 'string'
+
             key_value_list.append(
                 KeyValueModel(item.get(KEY), value_string, desc_string)
             )
         return key_value_list
+
+    @staticmethod
+    def get_auth_headers(self, auth_headers: json, env_variables) -> list:
+        if auth_headers is None or len(auth_headers) == 0:
+            return None
+
+        headers = []
+        auth_type = auth_headers.get('type')
+        auth_values = auth_headers.get(auth_type)
+
+        if auth_type == "apikey":
+            for item in auth_values:
+                value_string = DocumentGenerator.escape_string(item.get(VALUE));
+                if item.get(KEY) == KEY:
+                    header_key = value_string
+                else:
+                    header_value = self.apply_env_values_string(value_string, env_variables)
+            headers.append(KeyValueModel(header_key, header_value, auth_type))
+        elif auth_type == 'bearer':
+            headers.append(KeyValueModel(auth_type + ' ' + auth_values[0].get('key'), auth_values[0].get('value'), auth_values[0].get('type')))
+
+        return headers
+
+    @staticmethod
+    def get_env_variables(self):
+        if self.env_file is None:
+            if self.api_collection.default_env is not None:
+                env_variables = { 'values': self.api_collection.default_env }
+            else:
+                env_variables = self.env_file
+        else:
+            env_variables = self.env_file
+
+        return env_variables
+
+
+

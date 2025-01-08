@@ -1,6 +1,5 @@
 import json
 
-
 class KeyValueModel:
     key: str = None
     description: str = None
@@ -47,7 +46,9 @@ class APIModel:
     path_variables: list = None
 
     url: str = None
+    route: str = None
     examples: list = []
+    body_exist: bool = False
 
     def __init__(self):
         super().__init__()
@@ -62,6 +63,8 @@ class APICollectionModel:
     schema: str = None
     file_name: str = None
     env_file_name: str = None
+    auth: KeyValueModel = None
+    default_env: KeyValueModel = None
 
     def __init__(self):
         super().__init__()
