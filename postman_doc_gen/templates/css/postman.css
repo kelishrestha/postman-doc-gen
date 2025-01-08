@@ -296,7 +296,7 @@ body :not(pre) > code[class*="language-"], body pre[class*="language-"], body .c
     bottom: 0;
     display: block;
     cursor: pointer;
-    font-family: Open Sans;
+    font-family: Open Sans, sans-serif;
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
