@@ -56,7 +56,7 @@
         <main class="page-content">
             <div id="overlay" class="overlay"></div>
             <div class="container-fluid">
-                <div class="row d-flex align-items-center p-3 border-bottom">
+                <div class="row d-flex align-items-center p-0 border-bottom">
                     <div class="col-md-1">
                         <a id="toggle-sidebar" class="btn rounded-0 p-3" href="#"> <i class="fas fa-bars"></i> </a>
                     </div>
@@ -98,7 +98,7 @@
                                         </div>
                                      </div>
                                     {%- if api.route is defined and api.route is not none%}
-                                    <div class="url">{{api.route}}</div>
+                                    <div class="url font-weight-bold">{{api.route}}</div>
                                     {% endif %}
                                     {%- if api.description is defined and api.description is not none%}
                                     <div class="description request-description">
@@ -113,8 +113,8 @@
                                         {%- for item in api.headers %}
                                           <div class="param row">
                                             <div class="name col-md-3 col-xs-12">{{ item.key }}</div>
-                                            <div class="value col-md-9 col-xs-12">{{ item.value | safe}}</div>
-                                            <div class="description col-md-9 col-xs-12"><p>{{ item.description | safe}}</p>
+                                            <div class="value col-md-9 col-xs-12">{{ item.description | safe}}</div>
+                                            <div class="description col-md-9 col-xs-12 font-italic"><p>{{ item.value | safe}}</p>
                                             </div>
                                           </div>
                                         {%- endfor %}
@@ -128,8 +128,8 @@
                                         {%- for item in api.params %}
                                           <div class="param row">
                                             <div class="name col-md-3 col-xs-12">{{ item.key }}</div>
-                                            <div class="value col-md-9 col-xs-12">{{ item.value | safe}}</div>
-                                            <div class="description col-md-9 col-xs-12"><p>{{ item.description | safe}}</p>
+                                            <div class="value col-md-9 col-xs-12">{{ item.description | safe}}</div>
+                                            <div class="description col-md-9 col-xs-12 font-italic"><p>{{ item.value | safe}}</p>
                                             </div>
                                           </div>
                                         {%- endfor %}
@@ -143,8 +143,8 @@
                                         {%- for item in api.path_variables %}
                                         <div class="param row">
                                             <div class="name col-md-3 col-xs-12">{{ item.key }}</div>
-                                            <div class="value col-md-9 col-xs-12">{{ item.value | safe}}</div>
-                                            <div class="description col-md-9 col-xs-12"><p>{{ item.description | safe}}</p>
+                                            <div class="value col-md-9 col-xs-12">{{ item.description | safe}}</div>
+                                            <div class="description col-md-9 col-xs-12 font-italic"><p>{{ item.value | safe}}</p>
                                             </div>
                                           </div>
                                         {%- endfor %}
@@ -169,8 +169,8 @@
                                             {%- for item in api.body.key_values %}
                                               <div class="param row">
                                                 <div class="name col-md-3 col-xs-12">{{ item.key }}</div>
-                                                <div class="value col-md-9 col-xs-12">{{ item.value }}</div>
-                                                <div class="description col-md-9 col-xs-12"><p>{{ item.description }}</p>
+                                                <div class="value col-md-9 col-xs-12">{{ item.description }}</div>
+                                                <div class="description col-md-9 col-xs-12 font-italic"><p>{{ item.value }}</p>
                                                 </div>
                                               </div>
                                             {%- endfor %}
