@@ -239,6 +239,10 @@ class DocumentGenerator:
             if type(auth_headers) is not type(None):
                 api_collection_headers = auth_headers
 
+        auth = item.get(REQUEST, {}).get(AUTH, None)
+        if auth is not None:
+            api_collection_headers += DocumentGenerator.get_auth_headers(self, auth, env_variables)
+
         headers = item.get(REQUEST, {}).get(HEADER, None)
         if headers is not None:
             api_attached_headers = []
@@ -411,13 +415,16 @@ class DocumentGenerator:
         auth_type = auth_headers.get('type')
         auth_values = auth_headers.get(auth_type)
 
-        for item in auth_values:
-            value_string = DocumentGenerator.escape_string(item.get(VALUE));
-            if item.get(KEY) == KEY:
-                header_key = value_string
-            else:
-                header_value = self.apply_env_values_string(value_string, env_variables)
-        headers.append(KeyValueModel(header_key, header_value, auth_type))
+        if auth_type == "apikey":
+            for item in auth_values:
+                value_string = DocumentGenerator.escape_string(item.get(VALUE));
+                if item.get(KEY) == KEY:
+                    header_key = value_string
+                else:
+                    header_value = self.apply_env_values_string(value_string, env_variables)
+            headers.append(KeyValueModel(header_key, header_value, auth_type))
+        elif auth_type == 'bearer':
+            headers.append(KeyValueModel(auth_type + ' ' + auth_values[0].get('key'), auth_values[0].get('value'), auth_values[0].get('type')))
 
         return headers
 
