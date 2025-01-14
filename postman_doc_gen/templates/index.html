@@ -5,19 +5,20 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Free bootstrap documentation template">
+    <meta name="description" content="API Documentation">
     <title>{{collection.name}}</title>
     <!-- using online links -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link rel="stylesheet" href="https://malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.min.css">
     <!-- using local links -->
-    <link rel="stylesheet" href="css/main.min.css">
-    <link rel="stylesheet" href="css/sidebar-themes.min.css">
-    <link rel="stylesheet" href="css/bootstrap-treeview.min.css">
-    <link rel="stylesheet" href="css/postman.min.css">
+    <link rel="stylesheet" href="./css/main.min.css">
+    <link rel="stylesheet" href="./css/sidebar-themes.min.css">
+    <link rel="stylesheet" href="./css/bootstrap-treeview.min.css">
+    <link rel="stylesheet" href="./css/postman.min.css">
 
-    <link rel="shortcut icon" type="image/png" href="img/favicon.png" /> </head>
+    <link rel="shortcut icon" type="image/png" href="./img/favicon.png" />
+</head>
 
 <body>
     <div class="page-wrapper toggled light-theme">
@@ -91,15 +92,20 @@
                         <div class="row row-no-padding row-eq-height pb-5">
                             <div class="col-md-6 col-xs-12 section">
                                 <div class="api-information" id="{{api.id}}">
+
                                      <div class="heading">
-                                        <div class="name">
-                                            <span class="{{api.method}} method" >{{api.method}}</span>
+                                        <div class="h4 font-weight-bold">
                                             {{api.name}} <span class="lock-icon"></span>
                                         </div>
                                      </div>
-                                    {%- if api.route is defined and api.route is not none%}
-                                    <div class="url font-weight-bold">{{api.route}}</div>
-                                    {% endif %}
+
+                                     {%- if api.route is defined and api.route is not none%}
+                                     <div class="url font-weight-bold">
+                                         <span class="{{api.method}} method">{{api.method}}</span>
+                                         {{api.route}}
+                                     </div>
+                                     {% endif %}
+
                                     {%- if api.description is defined and api.description is not none%}
                                     <div class="description request-description">
                                         <p>{{api.description|safe}}</p>
@@ -249,8 +255,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
     </script>
     <script src="https://malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="js/bootstrap-treeview.min.js"></script>
-    <script src="js/main.min.js"></script>
+    <script src="./js/bootstrap-treeview.min.js"></script>
+    <script src="./js/main.min.js"></script>
     <script type="application/javascript">
         var data = {{ side_tree|safe }}
         $('#tree').treeview({
