@@ -48,6 +48,7 @@ class DocumentGenerator:
 
         filename = os.path.join(output_dir, OUTPUT_FILE_NAME)
         css_dir = os.path.join(root, TEMPLATES_DIR, CSS_DIR)
+        img_dir = os.path.join(root, TEMPLATES_DIR, IMG_DIR)
         js_dir = os.path.join(root, TEMPLATES_DIR, JS_DIR)
         collection_destination = os.path.join(output_dir, os.path.basename(collection_file_name))
 
@@ -72,6 +73,7 @@ class DocumentGenerator:
         if download_enabled:
             DocumentGenerator.copy_file(collection_file_name, collection_destination)
         copy_tree(css_dir, os.path.join(output_dir, CSS_DIR))
+        copy_tree(img_dir, os.path.join(output_dir, IMG_DIR))
         copy_tree(js_dir, os.path.join(output_dir, JS_DIR))
 
         with open(filename, 'w') as fh:

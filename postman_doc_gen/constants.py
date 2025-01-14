@@ -7,6 +7,7 @@ OUTPUT_FILE_NAME = 'index.html'
 
 CSS_DIR = 'css'
 JS_DIR = 'js'
+IMG_DIR = 'img'
 
 FOLDER_ICON = 'fas fa-folder'
 
