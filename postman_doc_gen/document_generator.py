@@ -13,8 +13,6 @@ from jinja2 import Environment, FileSystemLoader
 from constants import *
 from models import APIExampleModel, APIModel, APICollectionModel, APIBodyModel, KeyValueModel
 
-import pdb
-
 class DocumentGenerator:
     side_tree = OrderedDict()
     api_info = []
